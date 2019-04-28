@@ -63,8 +63,12 @@ int main()
 	unsigned int vertexShader;
 	//vertexShader devient un shader
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+
 	//understanding the **	
 	//std::cout << vertexShaderSource <<std::endl << &vertexShaderSource<<std::endl<<"3"<<std::endl;
+
+
 	//link the vertexshader to the source code above
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	//and compile
@@ -120,21 +124,27 @@ int main()
 
 	//Triangle
 	float vertices[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
+		 //triangle 1
 		 0.5f, -0.5f, 0.0f,  // bottom right
 		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		-0.5f,  0.5f, 0.0f,   // top left 
+		//triangle 2
+		0.5f,  0.5f, 0.0f,  // top right
+		-0.5f,  0.5f, 0.0f,  // top left 
+		0.5f, -0.5f, 0.0f  // bottom right
+
 	};
 
-	unsigned int indices[] = {  // note that we start from 0!
+	/* unsigned int indices[] = {  // note that we start from 0!
 	0, 1, 3,   // first triangle
 	1, 2, 3    // second triangle
-	};
+	}; */
 	//id of buffer & array 
-	unsigned int VBO, VAO, EBO;
+	unsigned int VBO, VAO;
+	// unsigned int EBO;
 	//Buffer generation : only 1
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	//glGenBuffers(1, &EBO);
 	glGenVertexArrays(1, &VAO);
 	
 	//link GL_ARRAY_BUFFER to VBO
@@ -149,8 +159,9 @@ int main()
 	glEnableVertexAttribArray(0);
 
 	//BIND EBO 
+	/*
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); */
 
 
 
@@ -170,8 +181,8 @@ int main()
 		// draw the triangle.
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);   //wireframe mode
+		glDrawArrays(GL_TRIANGLES, 0,6);
 		glBindVertexArray(0);
 		//swap the buffer & check events
 		glfwSwapBuffers(window);
