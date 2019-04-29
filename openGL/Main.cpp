@@ -12,9 +12,10 @@ const char *vertexShaderSource = "#version 330 core\n" //Version of OpenGL
 //fragment shader source code 
 const char *fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 ourColor;\n"
 "void main()\n"
 "{\n"
-"	FragColor = vec4(1.0f, 1.0f, 0.2f, 1.0f);\n"
+"	FragColor = ourColor;\n"
 "}\0 ";
 
 // Input function to close windows with escape 
@@ -167,10 +168,15 @@ int main()
 		//rendering
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		//change the color 
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 		// draw the triangle.
 		glUseProgram(shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		glBindVertexArray(VAO);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireframe mode
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		//swap the buffer & check events
