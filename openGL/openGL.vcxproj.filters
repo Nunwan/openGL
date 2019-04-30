@@ -25,4 +25,17 @@
   <ItemGroup>
     <None Include="cpp.hint" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fragment.vert">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="vertex.vert">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
