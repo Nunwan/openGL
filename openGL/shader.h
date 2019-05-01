@@ -92,7 +92,6 @@ public:
 	{
 		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 	}
-
 private:
 	// utility function for checking shader compilation/linking errors.
 	// ------------------------------------------------------------------------
