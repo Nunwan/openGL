@@ -35,6 +35,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 int main()
 {
+	//Global parameters
+	int screenHeight = 600;
+	int screenWidth = 800;
 	//Initialisation of glfw 
 	//------------------------------------------------------------------
 
@@ -48,7 +51,7 @@ int main()
 	
 
 	//Window creation 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", NULL, NULL);
 
 	//Checks
 	//------------------------------------------------------------------
@@ -97,6 +100,49 @@ int main()
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 
+	float verticesct3D[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
 	//indices for EBO 
 
 	unsigned int indices[] = {  // note that we start from 0!
@@ -175,7 +221,7 @@ int main()
 	//link GL_ARRAY_BUFFER to VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//save vertices in memory
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesct), verticesct, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesct3D), verticesct3D, GL_STATIC_DRAW);
 
 	//Buffer EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -185,12 +231,10 @@ int main()
 
 
 	//Attribute pointers to buff to VAO  : position 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
 
 
 	ourShader.use();
@@ -199,7 +243,6 @@ int main()
 	ourShader.setFloat("opacity", 0.2f);
 
 	
-
 
 	//RENDERING
 	//------------------------------------------------------------------
@@ -216,14 +259,22 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//others
-		//Transformation : 
-		glm::vec3 vec(1.0f, 0.0f, 0.0f);
-		glm::mat4 trans = glm::mat4(1.0f);
-		trans = glm::translate(trans, vec);
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+		 
+		//model matrix 
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+		//view matrix : object will be 3.0 backwards
+		glm::mat4 view = glm::mat4(1.0f);
+		// note that we're translating the scene in the reverse direction of where we want to move
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		//perpective matrix
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 
-		ourShader.setMat4("transform", trans);
+		ourShader.setMat4("model", model);
+		ourShader.setMat4("view", view);
+		ourShader.setMat4("projection", projection);
+
 		// select texture1
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -237,8 +288,8 @@ int main()
 
 	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireframe mode
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	//	glDrawArrays(GL_TRIANGLES, 0, 3);	
+	//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);	
 
 		//swap the buffer & check events
 		glfwSwapBuffers(window);
