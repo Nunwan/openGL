@@ -1,26 +1,38 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include "shader.h"
+//					MAIN PROGRAM OF LEARNING OpenGL 
+//							BERTIN ROBIN
+//							TRY TO DO HIS BEST
 
+// INCLUDE
+//------------------------------------------------------------------ 
+
+//Standard library
+#include <iostream>
+//OpenGL loader
+#include <glad/glad.h> 
+//GLFW library
+#include <GLFW/glfw3.h>
+//mathematical OpenGL library
+#include <glm/glm.hpp> 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+//library to open image in char
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-// Input function to close windows with escape 
-void processInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
+//Own Header
+//Header file for shader class & build.
+#include "shader.h"
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
+
+//Calling
+//------------------------------------------------------------------ 
+void processInput(GLFWwindow *window);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+//------------------------------------------------------------------ 
+
+
 int main()
 {
 	//Initialisation of glfw 
@@ -184,7 +196,11 @@ int main()
 	ourShader.use();
 	glUniform1i(glGetUniformLocation(ourShader.ID, "ourTexture1"), 0);
 	ourShader.setInt("ourTexture2", 1);
-	ourShader.setFloat("opacity", 0.2);
+	ourShader.setFloat("opacity", 0.2f);
+
+	
+
+
 	//RENDERING
 	//------------------------------------------------------------------
 
@@ -200,7 +216,12 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//others
+		//Transformation : 
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
+		ourShader.setMat4("transform", trans);
 		// select texture1
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -231,4 +252,20 @@ int main()
 	glfwTerminate();
 
 	return 0;
+}
+
+// Input function to close windows with escape 
+void processInput(GLFWwindow *window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
 }
