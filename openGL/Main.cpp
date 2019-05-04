@@ -256,6 +256,7 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	//------------------------------------------------------------------ 
 	//RENDERING
 	//------------------------------------------------------------------
 
@@ -280,7 +281,8 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
-		//drawing
+		//------------------------------------------------------------------ 
+		//SCENE, CAMERA & OBJECTS
 		//------------------------------------------------------------------ 
 
 		ourShader.use();
@@ -296,8 +298,19 @@ int main()
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
 
+		// Camera 
+		//------------------------------------------------------------------ 
 
-		
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);  
+		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // tricks for creating Right axis of Camera
+		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+		glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
+
+		//Creation of object
+		//------------------------------------------------------------------ 
+
 		for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
@@ -313,6 +326,9 @@ int main()
 		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireframe mode
 		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+
+
+		//------------------------------------------------------------------ 
 		//swap the buffer & check events
 		//------------------------------------------------------------------ 
 		glfwSwapBuffers(window);
