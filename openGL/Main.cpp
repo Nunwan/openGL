@@ -2,6 +2,7 @@
 //							BERTIN ROBIN
 //					   	TRY TO DO HIS BEST
 
+//------------------------------------------------------------------ 
 // INCLUDE
 //------------------------------------------------------------------ 
 
@@ -24,6 +25,21 @@
 //Header file for shader class & build.
 #include "shader.h"
 
+//------------------------------------------------------------------ 
+//Global Variables
+//------------------------------------------------------------------ 
+
+//Camera Variables
+//------------------------------------------------------------------ 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f); // tricks for creating Right axis of Camera
+
+//Time Variables 
+//------------------------------------------------------------------ 
+
+float deltaTime = 0.0f; // Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
 
 //Calling
 //------------------------------------------------------------------ 
@@ -264,20 +280,29 @@ int main()
 	glViewport(0, 0, 800, 600);
 	while (!glfwWindowShouldClose(window))
 	{
-		//input
+		// Input
+		//------------------------------------------------------------------ 
 		processInput(window);
 
-		//rendering
+		// Rendering
+		//------------------------------------------------------------------ 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		
+		// Calculating the time of frame
+		//------------------------------------------------------------------ 
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
-		// select texture1
+		// Texture selection 
+		//------------------------------------------------------------------ 
+
+		// Select texture1
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
-		//select texture2
+		// Select texture2
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
@@ -288,25 +313,23 @@ int main()
 		ourShader.use();
 		glBindVertexArray(VAO);
 
-		//view matrix : object will be 3.0 backwards
-		glm::mat4 view = glm::mat4(1.0f);
-		// note that we're translating the scene in the reverse direction of where we want to move
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		// Camera 
+		//------------------------------------------------------------------ 
+		/*float radius = 10.0f;
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+
+		glm::vec3 cameraPos = glm::vec3(camX, 0.0f, camZ);*/
+
+		glm::mat4 view;
+		view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
 		//perpective matrix
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
 
-		// Camera 
-		//------------------------------------------------------------------ 
 
-		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);  
-		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // tricks for creating Right axis of Camera
-		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-		glm::vec3 cameraUp = glm::normalize(glm::cross(cameraDirection, cameraRight));
 
 		//Creation of object
 		//------------------------------------------------------------------ 
@@ -317,7 +340,7 @@ int main()
 			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * i;
 			if (i % 3 == 0)  // every 3rd iteration (including the first) we set the angle using GLFW's time function.
-				angle = glfwGetTime() * 25.0f;
+				angle = (float)glfwGetTime() * 25.0f;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			ourShader.setMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -334,8 +357,14 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	//------------------------------------------------------------------ 
+	// OUT OF RENDERING LOOP
+	//------------------------------------------------------------------ 
+
+
 	// optional: de-allocate all resources once they've outlived their purpose:
-	// ------------------------------------------------------------------------
+	// -----------------------------------------------------------------
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
@@ -346,11 +375,23 @@ int main()
 	return 0;
 }
 
-// Input function to close windows with escape 
+// Input function to interact with the windows 
 void processInput(GLFWwindow *window)
-{
+{	
+	//close the windows when escape key is press
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	//Camera 
+	float cameraSpeed = 2.5f * deltaTime; 
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
