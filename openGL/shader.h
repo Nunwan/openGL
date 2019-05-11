@@ -92,9 +92,15 @@ public:
 	{
 		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 	}
+	//------------------------------------------------------------------ 
 	void setMat4(const std::string &name, glm::mat4 lattice) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(lattice));
+	}
+	//------------------------------------------------------------------ 
+	void setVec3(const std::string &name, glm::vec3 vec) const
+	{
+		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
 	}
 private:
 	// utility function for checking shader compilation/linking errors.

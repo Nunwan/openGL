@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="lightning_v.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -151,6 +152,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <FileType>Document</FileType>
     </Text>
+    <Text Include="lightning_f.vert" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="object_f.vert" />

@@ -24,6 +24,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="lightning_v.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.h">
@@ -41,6 +44,12 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="object_v.vert">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="lightning_f.vert">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Text.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
