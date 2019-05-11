@@ -41,8 +41,8 @@ const int screenWidth = 800;
 //------------------------------------------------------------------ 
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = screenWidth / 2.0f;
-float lastY = screenHeight / 2.0f;
+double lastX = screenWidth / 2.0f;
+double lastY = screenHeight / 2.0f;
 bool firstMouse = true;
 
 
@@ -111,7 +111,7 @@ int main()
 	//------------------------------------------------------------------
 
 	//Triangle
-	float vertices3D[] = {
+	float verticesct3D[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -178,8 +178,11 @@ int main()
 
 
 	//Attribute pointers to buff to VAO  : position 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 
 	object.use();
@@ -192,7 +195,7 @@ int main()
 	glBindVertexArray(lightVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// set the vertex attributes (only position data for our lamp)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 
@@ -211,7 +214,7 @@ int main()
 		glm::vec3(1.5f,  0.2f, -1.5f),
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
-	glm::vec3 lightPosition(1.2f, 1.0f, -1.0f);
+	glm::vec3 lightPosition(0.5f, 0.2f, 1.0f);
 	//------------------------------------------------------------------ 
 	//RENDERING
 	//------------------------------------------------------------------
@@ -270,6 +273,8 @@ int main()
 		object.setMat4("model", model);
 		object.setVec3("lightColor", glm::vec3(1.0f));
 		object.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+		object.setVec3("lightPos", lightPosition);
+		object.setVec3("viewPos", camera.Position);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		lightingShader.use();
