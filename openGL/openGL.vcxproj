@@ -140,7 +140,7 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="vertex.vert">
+    <Text Include="object_v.vert">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
@@ -153,7 +153,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="fragment.vert" />
+    <Text Include="object_f.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\Pictures\wall.jpg" />

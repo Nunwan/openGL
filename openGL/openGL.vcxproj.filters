@@ -37,10 +37,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="fragment.vert">
+    <Text Include="object_f.vert">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="vertex.vert">
+    <Text Include="object_v.vert">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
