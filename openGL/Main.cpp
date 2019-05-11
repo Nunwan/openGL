@@ -267,7 +267,7 @@ int main()
 
 		//Creation of object
 		//------------------------------------------------------------------ 
-
+		lightPosition = glm::vec3(2*cos(glfwGetTime()), 0.2f, 2*sin(glfwGetTime()));
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[0]);
 		object.setMat4("model", model);
@@ -275,6 +275,10 @@ int main()
 		object.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		object.setVec3("lightPos", lightPosition);
 		object.setVec3("viewPos", camera.Position);
+		object.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+		object.setVec3("material.diffuse", glm::vec3( 1.0f, 0.5f, 0.31f));
+		object.setVec3("material.specular",glm::vec3( 0.5f, 0.5f, 0.5f));
+		object.setFloat("material.shininess", 32.0f);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		lightingShader.use();
