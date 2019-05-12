@@ -271,14 +271,26 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[0]);
 		object.setMat4("model", model);
-		object.setVec3("lightColor", glm::vec3(1.0f));
-		object.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		object.setVec3("lightPos", lightPosition);
 		object.setVec3("viewPos", camera.Position);
 		object.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
 		object.setVec3("material.diffuse", glm::vec3( 1.0f, 0.5f, 0.31f));
 		object.setVec3("material.specular",glm::vec3( 0.5f, 0.5f, 0.5f));
 		object.setFloat("material.shininess", 32.0f);
+		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+
+		object.setVec3("light.ambient", ambientColor);
+		object.setVec3("light.diffuse", diffuseColor);
+
+
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		lightingShader.use();
