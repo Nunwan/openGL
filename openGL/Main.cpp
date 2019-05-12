@@ -103,7 +103,7 @@ int main()
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	//Initialize the shader
+	//Initialize the shader with an object & a light
 	Shader object("object_v.vert", "object_f.vert");
 	Shader lightingShader("lightning_v.vert", "lightning_f.vert");
 
@@ -181,7 +181,7 @@ int main()
 	//Attribute pointers to buff to VAO  : position 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	// normal attribute
+	// Attribute pointers to buff to VAO : normal vector
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	// Texture Coord attribute
@@ -200,10 +200,17 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-
+	//Loading Textures
+	//------------------------------------------------------------------ 
 	unsigned int diffuseMap = load_Texture("../include/container2.png");
 	object.use();
 	object.setInt("material.diffuse", 0);
+
+	unsigned int specularMap = load_Texture("../include/container2_spec.png");
+	object.setInt("material.specular", 1);
+
+	//Others
+	//------------------------------------------------------------------ 
 
 	//Multiple cube Position.
 	glm::vec3 cubePositions[] = {
@@ -219,6 +226,8 @@ int main()
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	glm::vec3 lightPosition(0.5f, 0.2f, 1.0f);
+
+
 	//------------------------------------------------------------------ 
 	//RENDERING
 	//------------------------------------------------------------------
@@ -271,30 +280,34 @@ int main()
 
 		//Creation of object
 		//------------------------------------------------------------------ 
-		lightPosition = glm::vec3(0.5f, 0.2f,2.0f);
+
+
+		lightPosition = glm::vec3(0.6f, 0.3f,2.0f); 
+
+		// Properties of our objects
+
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, cubePositions[0]);
-		object.setMat4("model", model);
-		object.setVec3("lightPos", lightPosition);
-		object.setVec3("viewPos", camera.Position);
-		object.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-		object.setVec3("material.specular",glm::vec3( 0.5f, 0.5f, 0.5f));
-		object.setFloat("material.shininess", 32.0f);
-		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		object.setMat4("model", model); //position 
+		object.setVec3("viewPos", camera.Position); //camera Position
+		object.setFloat("material.shininess", 64.0f);  //shininess of object
 
 		// light properties
+		object.setVec3("light.position", lightPosition);
 		object.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		object.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//draw the cube
+		glDrawArrays(GL_TRIANGLES, 0, 36); 
 		
-		// bind diffuse map
+		// bind diffuse map in order to have detailled lighting
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
 
-		//light
+		// draw the light object
 		lightingShader.use();
 		lightingShader.setMat4("view", view);
 		lightingShader.setMat4("projection", projection);
@@ -304,6 +317,7 @@ int main()
 		lightingShader.setMat4("model", model);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireframe mode
 		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
