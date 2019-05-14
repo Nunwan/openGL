@@ -84,7 +84,8 @@
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>"C:\Users\Nunwan\source\repos\openGL\include\glfw3.lib";opengl32.lib;"C:\Users\Nunwan\source\repos\openGL\include\assimp-vc140-mt.lib";"C:\Users\Nunwan\source\repos\openGL\include\assimp-vc140-mt.dll";%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Nunwan\source\repos\openGL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,6 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
