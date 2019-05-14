@@ -287,8 +287,7 @@ int main()
 		// Properties of our objects
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, cubePositions[0]);
-		object.setMat4("model", model); //position 
+
 		object.setVec3("viewPos", camera.Position); //camera Position
 		object.setFloat("material.shininess", 64.0f);  //shininess of object
 
@@ -297,9 +296,19 @@ int main()
 		object.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		object.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		object.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+
 
 		//draw the cube
-		glDrawArrays(GL_TRIANGLES, 0, 36); 
+		for (int i = 0; i < 10; i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			object.setMat4("model", model); //position 
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		
 		// bind diffuse map in order to have detailled lighting
 		glActiveTexture(GL_TEXTURE0);
