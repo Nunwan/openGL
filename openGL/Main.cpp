@@ -291,12 +291,17 @@ int main()
 		object.setVec3("viewPos", camera.Position); //camera Position
 		object.setFloat("material.shininess", 64.0f);  //shininess of object
 
-		// light properties
+		// light properties 
 		object.setVec3("light.position", lightPosition);
 		object.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		object.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		object.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		//object.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		//light attenuation 
+		object.setFloat("light.constant", 1.0f);
+		object.setFloat("light.linear", 0.09f);
+		object.setFloat("light.quadratic", 0.032f);
+
 
 
 		//draw the cube
