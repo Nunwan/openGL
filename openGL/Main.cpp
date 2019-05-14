@@ -123,7 +123,7 @@ int main()
 
 	//load Models
 	//------------------------------------------------------------------ 
-	Model ourModel("resources/objects/nanosuit/nanosuit.obj");
+	Model ourModel("../resources/nanosuit/nanosuit.obj");
 
 	
 	//------------------------------------------------------------------ 
@@ -134,6 +134,13 @@ int main()
 	glViewport(0, 0, 800, 600);
 	while (!glfwWindowShouldClose(window))
 	{
+			
+		// per-frame time logic
+	    // --------------------
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		// Input
 		//------------------------------------------------------------------ 
 		processInput(window);
