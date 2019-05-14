@@ -225,9 +225,14 @@ int main()
 		glm::vec3(1.5f,  0.2f, -1.5f),
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
-	glm::vec3 lightPosition(0.5f, 0.2f, 1.0f);
 
-
+	// positions of the point lights
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.7f,  0.2f,  2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+	};
 	//------------------------------------------------------------------ 
 	//RENDERING
 	//------------------------------------------------------------------
@@ -276,13 +281,64 @@ int main()
 		object.setMat4("view", view);
 		object.setMat4("projection", projection);
 
-
+		// Light Properties
+			  /*
+		   Here we set all the uniforms for the 5/6 types of lights we have. We have to set them manually and index
+		   the proper PointLight struct in the array to set each uniform variable. This can be done more code-friendly
+		   by defining light types as classes and set their values in there, or by using a more efficient uniform approach
+		   by using 'Uniform buffer objects', but that is something we'll discuss in the 'Advanced GLSL' tutorial.
+		*/
+		// directional light
+		object.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		object.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		object.setVec3("dirLight.diffuse", 0.2f, 0.2f, 0.2f);
+		object.setVec3("dirLight.specular", 0.4f, 0.4f, 0.4f);
+		// point light 1
+		object.setVec3("pointLights[0].position", pointLightPositions[0]);
+		object.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		object.setVec3("pointLights[0].diffuse", 0.6f, 0.6f, 0.6f);
+		object.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		object.setFloat("pointLights[0].constant", 1.0f);
+		object.setFloat("pointLights[0].linear", 0.09);
+		object.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		object.setVec3("pointLights[1].position", pointLightPositions[1]);
+		object.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		object.setVec3("pointLights[1].diffuse", 0.6f, 0.6f, 0.6f);
+		object.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		object.setFloat("pointLights[1].constant", 1.0f);
+		object.setFloat("pointLights[1].linear", 0.09);
+		object.setFloat("pointLights[1].quadratic", 0.032);
+		// point light 3
+		object.setVec3("pointLights[2].position", pointLightPositions[2]);
+		object.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		object.setVec3("pointLights[2].diffuse", 0.6f, 0.6f, 0.6f);
+		object.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		object.setFloat("pointLights[2].constant", 1.0f);
+		object.setFloat("pointLights[2].linear", 0.09);
+		object.setFloat("pointLights[2].quadratic", 0.032);
+		// point light 4
+		object.setVec3("pointLights[3].position", pointLightPositions[3]);
+		object.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		object.setVec3("pointLights[3].diffuse", 0.6f, 0.6f, 0.6f);
+		object.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		object.setFloat("pointLights[3].constant", 1.0f);
+		object.setFloat("pointLights[3].linear", 0.09);
+		object.setFloat("pointLights[3].quadratic", 0.032);
+		// spotLight
+		object.setVec3("spotLight.position", camera.Position);
+		object.setVec3("spotLight.direction", camera.Front);
+		object.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		object.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		object.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		object.setFloat("spotLight.constant", 1.0f);
+		object.setFloat("spotLight.linear", 0.09);
+		object.setFloat("spotLight.quadratic", 0.032);
+		object.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		object.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
 		//Creation of object
 		//------------------------------------------------------------------ 
-
-
-		lightPosition = glm::vec3(0.6f, 0.3f,2.0f); 
 
 		// Properties of our objects
 
@@ -291,15 +347,6 @@ int main()
 		object.setVec3("viewPos", camera.Position); //camera Position
 		object.setFloat("material.shininess", 64.0f);  //shininess of object
 
-		// light properties 
-		object.setVec3("light.position", camera.Position);
-		object.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		object.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		object.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		object.setVec3("light.direction", camera.Front);
-		//light cutoff
-		object.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		object.setFloat("light.outercutOff", glm::cos(glm::radians(17.5f)));
 
 
 
@@ -321,16 +368,20 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 
-		// draw the light object
+		// also draw the lamp object(s)
 		lightingShader.use();
-		lightingShader.setMat4("view", view);
 		lightingShader.setMat4("projection", projection);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPosition);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lightingShader.setMat4("model", model);
+		lightingShader.setMat4("view", view);
+		// we now draw as many light bulbs as we have point lights.
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+			lightingShader.setMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireframe mode
 		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
