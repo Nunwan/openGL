@@ -299,6 +299,8 @@ int main()
 		object.setVec3("light.direction", camera.Front);
 		//light cutoff
 		object.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		object.setFloat("light.outercutOff", glm::cos(glm::radians(17.5f)));
+
 
 
 
